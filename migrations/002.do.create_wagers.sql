@@ -5,5 +5,6 @@ CREATE TABLE wagers (
   end_date DATE,
   wager TEXT DEFAULT 'Bragging rights.',
   bettor1 INTEGER REFERENCES users(id),
-  bettor2 INTEGER REFERENCES users(id)
+  bettor2 INTEGER REFERENCES users(id),
+  wager_status TEXT NOT NULL
 );

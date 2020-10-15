@@ -3,6 +3,6 @@ CREATE TABLE users (
   username TEXT NOT NULL UNIQUE,
   first_name TEXT,
   last_name TEXT,
-  avatar TEXT DEFAULT 'club',
+  avatar TEXT DEFAULT 'avatar.png',
   password TEXT NOT NULL
 );

@@ -29,7 +29,7 @@ myWagersRouter
         MyWagersService.getUserWagers(knexInstance, user_id)
           .then(wagers => {
              if(wagers.length === 0) {
-               return res.send('No wagers yet.')
+               return res.send({error: { message: 'No wagers yet.'}})
              }
              res.json(wagers.map(wager => WagersService.serializeWager(wager)));
              next();

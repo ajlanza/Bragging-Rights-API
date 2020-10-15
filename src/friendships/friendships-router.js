@@ -6,14 +6,17 @@ const FriendshipsService = require('./friendships-service');
 const UsersService = require('../users/users-service');
 const jwt = require('jsonwebtoken');
 const { resolve } = require('url');
+const { serializeUser } = require('../users/users-service');
 
 const friendshipsRouter = express.Router();
 const jsonParser = express.json();
 
 const serializeFriend = friend => ({
-    friend_id: xss(friend.friend_id),
+    friend_id: friend.friend_id,
     username: xss(friend.username),
     avatar: xss(friend.avatar),
+    pending: friend.pending,
+    approved: friend.approved
   })
 
 friendshipsRouter
@@ -26,7 +29,7 @@ friendshipsRouter
     if(!user_id) {
       return res
         .status(400)
-        .json({ error: { message: `User not selected.`}})
+        .json({ error: { message: `User not supplied.`}})
     }
     // Check friend name was supplied
     if(!friend_name) {
@@ -52,29 +55,96 @@ friendshipsRouter
                 .json({ error: { message: `User does not exist.`}})
             })
         // If both user and friend are valid users, insert the new friendship into the table
-          const newFriendship = {
+          const initiatorFriendship = {
             user_id,
-            friend_id
+            friend_id,
+            pending: true,
+            approved: true,
           }
           let temp_id = user_id;
           user_id = friend_id;
           friend_id = temp_id;
-          const reverseFriendship = {
+          const receivedFriendship = {
             user_id,
             friend_id,
+            pending: true,
+            approved: false,
           }
   
-          FriendshipsService.insertFriend(knexInstance, newFriendship)
+          FriendshipsService.insertFriend(knexInstance, initiatorFriendship)
             .then(friend => {
               res
                 .status(201)
                 .location(path.posix.join(req.originalUrl, `/$friend.id`))
                 .json(FriendshipsService.serializeFriend(friend))
             })
-          FriendshipsService.insertFriend(knexInstance, reverseFriendship)
+          FriendshipsService.insertFriend(knexInstance, receivedFriendship)
         }
       })
       .catch(next)
+  })
+  .patch(jsonParser, (req, res, next) => {
+    const knexInstance = req.app.get('db');
+    let { user_id, friend_id, action } = req.body;
+    if(!user_id) {
+      return res
+        .status(400)
+        .json({ error: { message: `User not selected.`}})
+    }
+    // Check friend name was supplied
+    if(!friend_id) {
+      return res
+        .status(400)
+        .json({ error: { message: `Friend not selected.` }})
+    }
+    // Check both are valid users
+    if(isNaN(user_id) || isNaN(friend_id)) {
+      return res
+        .status(400)
+        .json({ error: { message: `Id must be an integer.` }})
+    }
+    WagersService.hasUserWithId(knexInstance, user_id)
+      .then(hasUserWithId => {
+        if(!hasUserWithId)
+          return res
+            .status(400)
+            .json({ error: { message: `User does not exist.`}})
+       })
+    WagersService.hasUserWithId(knexInstance, friend_id)
+      .then(hasUserWithId => {
+        if(!hasUserWithId)
+          return res
+            .status(400)
+            .json({ error: { message: `Friend does not exist.`}})
+       })
+    if(action === 'approve') {
+      FriendshipsService.approveFriend(knexInstance, user_id, friend_id)
+        .then(()=> {
+          FriendshipsService.approveFriend(knexInstance, friend_id, user_id)
+            .then(() => {
+              res
+                .status(202)
+                .json('Friend approved')
+          // .location(path.posix.join(req.originalUrl, `/$approved.id`))
+          // .json(FriendshipsService.serializeFriend(approved))
+          })
+        })
+        .catch(next)
+      }
+    if(action === 'deny') {
+      FriendshipsService.denyFriend(knexInstance, user_id, friend_id)
+        .then(()=> {
+          FriendshipsService.denyFriend(knexInstance, friend_id, user_id)
+            .then(() => {
+              res
+                .status(202)
+                .json('Friend denied')
+          // .location(path.posix.join(req.originalUrl, `/$approved.id`))
+          // .json(FriendshipsService.serializeFriend(approved))
+          })
+        })
+        .catch(next)
+    }
   })
 
 friendshipsRouter

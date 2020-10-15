@@ -19,7 +19,7 @@ wagersRouter
   })
   .post(jsonParser, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    const {title, start_date, end_date, bettor1, bettor2, wager } = req.body
+    const {title, start_date, end_date, bettor1, bettor2, wager, wager_status } = req.body
     if(!title){
       return res
         .status(400)
@@ -35,6 +35,11 @@ wagersRouter
       return res
         .status(400)
         .json({ error: { message: `Bettor2 not valid.` }})
+    }
+    if(!wager_status){
+      return res
+        .status(400)
+        .json({ error: {message: `Wager status not provided.`}})
     }
     // Check that both bettor1 and bettor2 are valid users.
     WagersService.hasUserWithId(knexInstance, bettor1)
@@ -58,7 +63,8 @@ wagersRouter
       end_date,
       bettor1,
       bettor2,
-      wager
+      wager,
+      wager_status
     }
     // Add the new wager to the wagers table
     WagersService.insertWager(knexInstance, newWager)
@@ -70,6 +76,32 @@ wagersRouter
       })
       .catch(next)
   })
+  .patch(jsonParser, (req, res, next) => {
+    const knexInstance = req.app.get('db');
+    let { wager_id, wager_status } = req.body;
+    if(!wager_id) {
+      return res
+        .status(400)
+        .json({ error: { message: `Wager not selected.`}})
+    }
+    if(!wager_status) {
+      return res
+        .status(400)
+        .json({ error: { message: `Wager status not provied.`}})
+    }
+    if(isNaN(wager_id)) {
+      return res
+        .status(400)
+        .json({ error: { message: `Wager id invalid.`}})
+    }
+    WagersService.approveWager(knexInstance, wager_id, wager_status)
+      .then(() => (
+        res
+          .status(202)
+          .json('Wager approved.')
+      ))
+  })
+    
 
 wagersRouter
   .route('/:wager_id')

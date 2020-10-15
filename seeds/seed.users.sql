@@ -1,14 +1,10 @@
 INSERT INTO users(username, first_name, last_name, avatar, password)
 VALUES
- ('Username', 'Firstname', 'Lastname', 'heart','password'),
- ('OneEye', 'Mads', 'Mikkelsen', 'spade', 'password'),
- ('Dimmy', 'Dim', 'Sum', 'diamond', 'password'),
- ('Alpha', 'Alex', 'Herzon', 'club', 'password'),
- ('Bravo', 'Brad', 'Mercury', 'heart', 'password'),
- ('Charlie', 'Charlotte', 'Stardust', 'spade', 'password'),
- ('Mario', null, null, 'heart', '$2a$12$xByE3iCGEn9W1CTAZXD.y.D686H6.cwhgFcPq2z0Lv/7LiqZFvarm'),
- ('Toad', null, null, 'spade', '$2a$12$xByE3iCGEn9W1CTAZXD.y.D686H6.cwhgFcPq2z0Lv/7LiqZFvarm'),
- ('Yoshi', null, null, 'diamond', '$2a$12$xByE3iCGEn9W1CTAZXD.y.D686H6.cwhgFcPq2z0Lv/7LiqZFvarm'),
- ('Luigi', null, null, 'club', '$2a$12$xByE3iCGEn9W1CTAZXD.y.D686H6.cwhgFcPq2z0Lv/7LiqZFvarm'),
- ('Daisy', null, null, 'heart','$2a$12$xByE3iCGEn9W1CTAZXD.y.D686H6.cwhgFcPq2z0Lv/7LiqZFvarm'),
- ('Peach', null, null, 'spade', '$2a$12$xByE3iCGEn9W1CTAZXD.y.D686H6.cwhgFcPq2z0Lv/7LiqZFvarm');
+ ('Username', 'Firstname', 'Lastname', 'heart.png','password'),
+ ('OneEye', 'Mads', 'Mikkelsen', 'spade.png', 'password'),
+ ('Dimmy', 'Dim', 'Sum', 'diamond.png', 'password'),
+ ('Alpha', 'Alex', 'Herzon', 'club.png', 'password'),
+ ('Bravo', 'Brad', 'Mercury', 'heart.png', 'password'),
+ ('Charlie', 'Charlotte', 'Stardust', 'spade.png', 'password'),
+ ('Daisy', null, null, 'heart.png','password'),
+ ('Peach', null, null, 'spade.png', 'password');

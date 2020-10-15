@@ -15,6 +15,26 @@ const FriendshipsService = {
       .returning('*')
       .then(([friend]) => friend)
   },
+  approveFriend(knex, user_id, friend_id) {
+    return knex('friendships')
+      .where('user_id', user_id)
+      .andWhere('friend_id', friend_id)
+      .update({
+        pending: false,
+        approved: true
+      })
+      // .then(([friendship]) => friendship)
+  },
+  denyFriend(knex, user_id, friend_id) {
+    return knex('friendships')
+      .where('user_id', user_id)
+      .andWhere('friend_id', friend_id)
+      .update({
+        pending: false,
+        approved: false
+      })
+      // .then(([friendship]) => friendship)
+  },
   hasUserWithName(knex, username) {
     return knex
       .from('users')
@@ -23,7 +43,6 @@ const FriendshipsService = {
       .then(username => !!username)
   },
   getIdByName(knex, username) {
-    console.log('in getIdByName and username is ', username)
     return knex
       .from('users')
       .where('username', username)

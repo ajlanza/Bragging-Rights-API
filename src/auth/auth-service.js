@@ -22,9 +22,9 @@ const AuthService = {
       algorithms: ['HS256'],
     })
   },
-  getId(token) {
-    console.log(jwt.decode(token));
-  }
+  // getId(token) {
+  //   console.log(jwt.decode(token));
+  // }
 }
 
 module.exports = AuthService
