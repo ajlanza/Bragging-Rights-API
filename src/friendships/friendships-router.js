@@ -117,7 +117,7 @@ friendshipsRouter
             .status(400)
             .json({ error: { message: `Friend does not exist.`}})
        })
-    if(action === 'approve') {
+    if(action === 'approved') {
       FriendshipsService.approveFriend(knexInstance, user_id, friend_id)
         .then(()=> {
           FriendshipsService.approveFriend(knexInstance, friend_id, user_id)
@@ -131,7 +131,7 @@ friendshipsRouter
         })
         .catch(next)
       }
-    if(action === 'deny') {
+    if(action === 'denied') {
       FriendshipsService.denyFriend(knexInstance, user_id, friend_id)
         .then(()=> {
           FriendshipsService.denyFriend(knexInstance, friend_id, user_id)
