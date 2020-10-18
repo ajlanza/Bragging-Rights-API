@@ -7,6 +7,7 @@ function makeUsersArray() {
       username: 'Username',
       first_name: 'Firstname',
       last_name: 'Lastname',
+      avatar: 'club.png',
       password: 'password'
     },
     {
@@ -14,6 +15,7 @@ function makeUsersArray() {
       username: 'OneEye',
       first_name: 'Mads',
       last_name: 'Mikkelsen',
+      avatar: 'club.png',
       password: 'password'
     },
     {
@@ -21,6 +23,7 @@ function makeUsersArray() {
       username: 'Dimmy',
       first_name: 'Dim',
       last_name: 'Sum',
+      avatar: 'club.png',
       password: 'password'
     },
     {
@@ -28,20 +31,23 @@ function makeUsersArray() {
       username: 'Alpha',
       first_name: 'Alex',
       last_name: 'Herzon',
+      avatar: 'club.png',
       password: 'password'
     },
     { 
       id: 5,
       username: 'Bravo',
       first_name: 'Brad',
-      last_name: 'Mercury', 
+      last_name: 'Mercury',
+      avatar: 'club.png', 
       password: 'password'
     },
     { 
       id: 6,
       username: 'Charlie',
       first_name: 'Charlotte',
-      last_name: 'Stardust', 
+      last_name: 'Stardust',
+      avatar: 'club.png', 
       password: 'password'
     },
     {
@@ -49,6 +55,7 @@ function makeUsersArray() {
       username: 'Delta',
       first_name: 'Denise',
       last_name: 'Smith',
+      avatar: 'club.png',
       password: 'password'
     },
   ]
@@ -62,7 +69,9 @@ function makeWagersArray() {
       start_date: '2020-10-03T04:00:00.000Z',
       end_date: null,
       bettor1: 1,
-      bettor2: 2
+      bettor2: 2,
+      wager: 'Bragging Rights',
+      wager_status: 'approved'
     },
     {
       id: 2,
@@ -70,7 +79,9 @@ function makeWagersArray() {
       start_date: '2020-10-31T04:00:00.000Z',
       end_date: '2020-11-14T05:00:00.000Z',
       bettor1: 2,
-      bettor2: 3
+      bettor2: 3,
+      wager: 'Bragging Rights',
+      wager_status: 'pending bettor2'
     },
     {
       id: 3,
@@ -78,7 +89,9 @@ function makeWagersArray() {
       start_date: '2020-10-31T04:00:00.000Z',
       end_date: null,
       bettor1: 4,
-      bettor2: 5
+      bettor2: 5,
+      wager: 'Bragging Rights',
+      wager_status: 'pending bettor1'
     },
     {
       id: 4,
@@ -86,7 +99,9 @@ function makeWagersArray() {
       start_date: '2020-04-12T04:00:00.000Z',
       end_date: null,
       bettor1: 4,
-      bettor2: 6
+      bettor2: 6,
+      wager: 'Bragging Rights',
+      wager_status: 'approved'
     },
     {
       id: 5,
@@ -94,7 +109,9 @@ function makeWagersArray() {
       start_date: '2020-03-30T04:00:00.000Z',
       end_date: null,
       bettor1: 1,
-      bettor2: 6
+      bettor2: 6,
+      wager: 'Bragging Rights',
+      wager_status: 'approved'
     },
   ]
 }
@@ -105,51 +122,71 @@ function makeFriendshipsArray() {
       id: 1,
       user_id: 1,
       friend_id: 2,
+      pending: false,
+      approved: true
     },
     {
       id: 2,
       user_id: 1,
       friend_id: 3,
+      pending: false,
+      approved: true
     },
     {
       id: 3,
       user_id: 2,
       friend_id: 1,
+      pending: false,
+      approved: true
     },
     {
       id: 4,
       user_id: 2,
       friend_id: 3,
+      pending: true,
+      approved: true
     },
     {
       id: 5,
       user_id: 3,
       friend_id: 1,
+      pending: false,
+      approved: true
     },
     {
       id: 6,
       user_id: 3,
       friend_id: 2,
+      pending: true,
+      approved: false
     },
     {
       id: 7,
       user_id: 4,
       friend_id: 5,
+      pending: false,
+      approved: true
     },
     {
       id: 8,
       user_id: 5,
       friend_id: 4,
+      pending: false,
+      approved: true
     },
     {
       id: 9,
       user_id: 1,
       friend_id: 5,
+      pending: false,
+      approved: true
     },
     {
       id: 10,
       user_id: 5,
       friend_id: 1,
+      pending: false,
+      approved: true
     },
   ]
 }

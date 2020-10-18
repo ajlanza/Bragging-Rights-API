@@ -153,7 +153,7 @@ friendshipsRouter
     const knexInstance = req.app.get('db');
     const userId = parseInt(req.params.user_id);
     const userError = UsersService.validateUsers(userId);
-    const tokenId = jwt.decode()
+    // const tokenId = jwt.decode()
 
     if(userError) 
       return res
@@ -170,7 +170,7 @@ friendshipsRouter
     FriendshipsService.getFriendships(knexInstance, userId)
       .then(friends => {
         if(friends.length < 1) {
-          res.json('No friends set up.')
+          res.json({message: 'No friends set up.'})
         }
         else { res.json(friends.map(serializeFriend)) }
       })

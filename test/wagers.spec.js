@@ -6,8 +6,8 @@ const { expect } = require('chai');
 
 describe('Wagers Endpoints', function() {
   let db;
-  const { testWagers } = helpers.makeBraggingRightsFixtures;
-  const { testUsers } = helpers.makeBraggingRightsFixtures;
+  const testWagers = helpers.makeWagersArray();
+  const testUsers = helpers.makeUsersArray();
 
   before('make knex instance', () => {
     db = knex({
@@ -19,9 +19,9 @@ describe('Wagers Endpoints', function() {
 
   after('disconnect from db', () => db.destroy())
 
-  before('clean the table', () => db.raw('TRUNCATE wagers RESTART IDENTITY CASCADE'))
+  before('clean the table', () => helpers.cleanTables(db))
 
-  afterEach('cleanup', () => db.raw('TRUNCATE wagers RESTART IDENTITY CASCADE'))
+  afterEach('cleanup', () => helpers.cleanTables(db))
 
   describe(`Get /api/wagers`, () => {
     context(`Given no wagers`, () => {

@@ -42,6 +42,7 @@ const UsersService = {
       username: xss(user.username),
       first_name: xss(user.first_name),
       last_name: xss(user.last_name),
+      avatar: (user.avatar),
       password: user.password
     }
   },
