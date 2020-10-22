@@ -36,6 +36,11 @@ const WagersService = {
       .where({ id })
       .update({ wager_status })
   },
+  assignWinner(knex, id, winner, wager_status) {
+    return knex('wagers')
+      .where({ id })
+      .update({ winner, wager_status })
+  },
   serializeWager(wager) {
     return {
       id: wager.id,
@@ -45,7 +50,8 @@ const WagersService = {
       bettor1: wager.bettor1,
       bettor2: wager.bettor2,
       wager: xss(wager.wager),
-      wager_status: xss(wager.wager_status)
+      wager_status: xss(wager.wager_status),
+      winner: wager.winner
     }
   }
 }

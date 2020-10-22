@@ -19,7 +19,8 @@ wagersRouter
   })
   .post(jsonParser, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    const {title, start_date, end_date, bettor1, bettor2, wager, wager_status } = req.body
+    const {title, start_date, end_date, bettor1, bettor2, wager_status } = req.body
+    let { wager } = req.body
     if(!title){
       return res
         .status(400)
@@ -35,6 +36,9 @@ wagersRouter
       return res
         .status(400)
         .json({ error: { message: `Bettor2 not valid.` }})
+    }
+    if(!wager){
+      wager = 'Bragging Rights'
     }
     if(!wager_status){
       return res
@@ -78,28 +82,47 @@ wagersRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    let { wager_id, wager_status } = req.body;
+    let { type, wager_id, wager_status, winner } = req.body;
+    if(!type)
+      return res
+        .status(400)
+        .json({ error: { message: `Type of patch not indicated.`}})
     if(!wager_id) {
       return res
         .status(400)
         .json({ error: { message: `Wager not selected.`}})
-    }
-    if(!wager_status) {
-      return res
-        .status(400)
-        .json({ error: { message: `Wager status not provied.`}})
     }
     if(isNaN(wager_id)) {
       return res
         .status(400)
         .json({ error: { message: `Wager id invalid.`}})
     }
-    WagersService.approveWager(knexInstance, wager_id, wager_status)
-      .then(() => (
-        res
-          .status(202)
-          .json('Wager approved.')
-      ))
+    if(type === 'approval' && !wager_status) {
+      return res
+        .status(400)
+        .json({ error: { message: `Wager status not provdied.`}})
+    }
+    if(type === 'winner' && !winner) {
+      return res
+        .status(400)
+        .json({ error: { message: `Winner not provided.`}})
+    }
+    if(type === 'approval') {
+      WagersService.approveWager(knexInstance, wager_id, wager_status)
+        .then(() => (
+          res
+            .status(202)
+            .json('Wager approved.')
+        ))
+    }
+    if(type === 'winner') {
+      WagersService.assignWinner(knexInstance, wager_id, winner, 'past')
+        .then(() => (
+          res
+            .status(202)
+            .json('Winner approved.')
+        ))
+    }
   })
     
 
