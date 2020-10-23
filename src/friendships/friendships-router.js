@@ -125,8 +125,6 @@ friendshipsRouter
               res
                 .status(202)
                 .json('Friend approved')
-          // .location(path.posix.join(req.originalUrl, `/$approved.id`))
-          // .json(FriendshipsService.serializeFriend(approved))
           })
         })
         .catch(next)
@@ -139,8 +137,6 @@ friendshipsRouter
               res
                 .status(202)
                 .json('Friend denied')
-          // .location(path.posix.join(req.originalUrl, `/$approved.id`))
-          // .json(FriendshipsService.serializeFriend(approved))
           })
         })
         .catch(next)

@@ -1,26 +1,241 @@
-# Express Boilerplate!
+# Bragging Rights API
 
-This is a boilerplate project used for starting a new project.
+API built with Node and Express to utilize a PostgresQL database.
+Testing accomplished with Mocha and Chai.  
+The api is designed to process users, friends, and wagers.
 
-## Set up
+## Live site:  
+https://brag.vercel.app/screen
 
-Complete the following steps to stat a new project (NEW-PROJECT NAME):
+## Client repo:
+https://github.com/ajlanza/Bragging-Rights
 
-1. Clone this repository to your local machine 'git clone BOILERPLATE-URL NEW-PROJECTS-NAME'
-2. 'cd' into cloned repository
-3. Make a fresh start of the git history for this project with 'rm -rf .git && git init'
-4. Install the node dependencies 'npm install'
-5. Move the example Environment file to '.env' that will be ignored by git and read by the express server 'mv example.env .env'
-6. Edit the contents of the 'package.json' to use NEW-PROJECT-NAME instead of '"name": "express-boilerplate",'
+## API Endpoints:
 
-## Scripts
 
-Start the application 'npm start'
+### /api/wagers
+GET: returns all wagers
+* Success 
+  * Code: 200
+  * Content:  
+      [  
+        { 
+        **id**: integer,
+        **title**: "string",
+        **start_date**: date,
+        **end_date**: null,
+        **bettor1**: integer,
+        **bettor2**: integer,
+        **wager**: "string",
+        **wager_status**: "string",
+        **winner**: integer,  
+        },
+        { 
+        **id**: integer,
+        **title**: "string",
+        **start_date**: date,
+        **end_date**: null,
+        **bettor1**: integer,
+        **bettor2**: integer,
+        **wager**: "string",
+        **wager_status**: "string",
+        **winner**: integer,  
+        }
+      ]
 
-Start nodemon for the application 'npm run dev'
+POST: adds new wager
+Required in body:
+ { 
+ **title**: "string",
+ **bettor1**: integer,
+ **bettor2**: integer,
+ **wager_status**: "string"
+ }
+ 
+* Success
+  * Code: 201
+  * Content:
+      { 
+        **id**: integer,
+        **title**: "string",
+        **start_date**: date,
+        **end_date**: null,
+        **bettor1**: integer,
+        **bettor2**: integer,
+        **wager**: "string",
+        **wager_status**: "string",
+        **winner**: integer,  
+      }
+* Error
+  * Code: 40X
+  * Content: 
+    { error: { message: "Error message string." } }
 
-Run the tests 'npm test'
+PATCH: updates wager with wager id provided
+Required in body:
+  {
+    **type**: "string", one of two values: "approval" or "winner"
+    **wager_id**: 2
+    **wager_status** "string", only required if type is "approval"
+    **winner** only required if type is "winner"
+  }
+* Success
+  * Code: 202
 
-## Deploying
+### /api/wagers/:wager_id
+GET: returns wager with wager id provided
+* Success 
+  * Code: 200
+  * Content:  
+      { 
+        **id**: integer,
+        **title**: "string",
+        **start_date**: date,
+        **end_date**: null,
+        **bettor1**: integer,
+        **bettor2**: integer,
+        **wager**: "string",
+        **wager_status**: "string",
+        **winner**: integer,  
+      }
+* Error
+  * Code: 40X
+  * Content:  
+  { error: { message: "Error message string." } }
+   
+### /api/myWagers/:user_id
+GET: returns all wagers containing supplied user id
+* Success 
+  * Code: 200
+  * Content:  
+      [  
+        { 
+          **id**: integer,
+          **title**: "string",
+          **start_date**: date,
+          **end_date**: null,
+          **bettor1**: integer,
+          **bettor2**: integer,
+          **wager**: "string",
+          **wager_status**: "string",
+          **winner**: integer,  
+        },
+        { 
+          **id**: integer,
+          **title**: "string",
+          **start_date**: date,
+          **end_date**: null,
+          **bettor1**: integer,
+          **bettor2**: integer,
+          **wager**: "string",
+          **wager_status**: "string",
+          **winner**: integer,  
+        }  
+      ]
+* Error
+  * Code: 40X
+  * Content:  
+  { error: { message: "Error message string." } }
 
-When you new project is ready for deployment, add a new Heroku application with 'heroku create'. This will make a new git remote called "heroku" and you can then 'npm run deploy' which will push to this remote's master branch.
+### /api/friends
+POST: add friend request
+Required in body:
+  {  
+    **user_id**: integer,
+    **friend_name**: "string,
+  }
+* Success
+  * Code: 201
+  * Content
+    {
+      **user_id**: integer
+      **friend_id**: integer
+      **avatar**: "string"
+    }
+* Error
+  * Code: 40X
+  * Content:  
+  { error: { message: "Error message string." } }
+
+PATCH: updates friendship status to approved or denied
+Required in body:
+  {
+    **user_id**: integer
+    **friend_id**: integer
+    **action**: "string" one of two values: "approved" or "denied"
+  }
+* Success
+  * Code: 202
+* Error
+  * Code: 40X
+  * Content:  
+  { error: { message: "Error message string." } }
+
+### /api/friends:user_id
+GET: returns friends of user when given their id
+* Success 
+  * Code: 200
+  * Con
+  [ 
+    {
+      **friend_id**: 2,
+      **username**: "string"
+      **avatar**: "string"
+      **pending**: boolean
+      **approved**: boolean
+    },
+    {
+      **friend_id**: 2,
+      **username**: "string"
+      **avatar**: "string"
+      **pending**: boolean
+      **approved**: boolean
+    }
+  ]
+* Error
+  * Code: 40X
+  * Content:  
+  { error: { message: "Error message string." } }
+
+### /api/auth/login
+POST: returns authroken on successful login
+Required in body:
+  {  
+    **username**: "string",
+    **password**: "string",
+  }
+* Success
+  * Code: 200
+  * Content: 
+  {
+    **authToken**: "string"
+  }
+    
+* Error
+  * Code: 40X
+  * Content:  
+  { error: "Error message string." }
+
+### /api/users
+POST: create a new user
+
+Required in body:
+ { 
+ **username**: "string",
+ **password**: "string",
+ }
+ 
+* Success 
+  * Code: 201
+  * Content:  
+  {
+    **id**: integer,
+    **username**: "string",
+    **first_name**: "string",
+    **last_name**: "string"
+    **avatar**: "string"
+  }
+* Error
+  * Code: 40X
+  * Content:  
+  { error: { message: "Error message string." } }
