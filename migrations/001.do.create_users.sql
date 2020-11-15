@@ -4,5 +4,7 @@ CREATE TABLE users (
   first_name TEXT,
   last_name TEXT,
   avatar TEXT DEFAULT 'avatar.png',
+  total_wins INTEGER NOT NULL DEFAULT 0,
+  total_losses INTEGER NOT NULL DEFAULT 0,
   password TEXT NOT NULL
 );

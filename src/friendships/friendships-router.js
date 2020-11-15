@@ -16,7 +16,9 @@ const serializeFriend = friend => ({
     username: xss(friend.username),
     avatar: xss(friend.avatar),
     pending: friend.pending,
-    approved: friend.approved
+    approved: friend.approved,
+    win: friend.win,
+    loss: friend.loss,
   })
 
 friendshipsRouter

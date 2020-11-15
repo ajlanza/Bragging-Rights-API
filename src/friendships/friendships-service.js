@@ -25,6 +25,22 @@ const FriendshipsService = {
       })
       // .then(([friendship]) => friendship)
   },
+  addWin(knex, winner_id, loser_id) {
+    return knex('friendships')
+      .where('user_id', winner_id)
+      .andWhere('friend_id', loser_id)
+      .update({
+         win: knex.raw('?? + 1', ['win'])
+      })
+  },
+  addLoss(knex, winner_id, loser_id) {
+    return knex('friendships')
+      .where('user_id', loser_id)
+      .andWhere('friend_id', winner_id)
+      .update({
+        loss: knex.raw('?? + 1', ['loss'])
+    })
+  },
   denyFriend(knex, user_id, friend_id) {
     return knex('friendships')
       .where('user_id', user_id)

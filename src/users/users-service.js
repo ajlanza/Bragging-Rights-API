@@ -36,6 +36,21 @@ const UsersService = {
   hashPassword(password) {
     return bcrypt.hash(password, 12)
   },
+  addTotalWin(knex, id){
+    return knex('users')
+      .where({ id })
+      .update({ 
+        total_wins: knex.raw('?? + 1', ['total_wins'])
+      })
+  },
+  addTotalLoss(knex, id){
+    return knex('users')
+      .where({ id })
+      .update({ 
+        total_losses: knex.raw('?? + 1', ['total_losses'])
+      })
+  },
+
   serializeUser(user) {
     return {
       id: user.id,
@@ -43,6 +58,8 @@ const UsersService = {
       first_name: xss(user.first_name),
       last_name: xss(user.last_name),
       avatar: (user.avatar),
+      total_wins: user.total_wins,
+      total_losses: user.total_losses,
       password: user.password
     }
   },
@@ -50,6 +67,7 @@ const UsersService = {
   getAllUsers(knex) {
     return knex.select('*').from('users')
   },
+
   getUserById(knex, userId) {
     return knex
       .from('users')

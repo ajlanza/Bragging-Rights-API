@@ -41,7 +41,9 @@ authRouter
                 const sub = dbUser.username
                 const payload = { 
                   user_id: dbUser.id,
-                  avatar: dbUser.avatar
+                  avatar: dbUser.avatar,
+                  total_losses: dbUser.total_losses,
+                  total_wins: dbUser.total_wins,
                 }
 
                 res.send({

@@ -3,5 +3,7 @@ CREATE TABLE friendships (
   user_id INTEGER REFERENCES users(id),
   friend_id INTEGER REFERENCES users(id),
   pending BOOLEAN,
-  approved BOOLEAN
+  approved BOOLEAN,
+  wins INTEGER NOT NULL DEFAULT 0,
+  losses INTEGER NOT NULL DEFAULT 0
 );
