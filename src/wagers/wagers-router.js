@@ -3,6 +3,7 @@ const path = require('path');
 const WagersService = require('./wagers-service');
 const UsersService = require('../users/users-service');
 const { hasUserWithId } = require('./wagers-service');
+const FriendshipsService = require('../friendships/friendships-service');
 
 const wagersRouter = express.Router();
 const jsonParser = express.json();
@@ -82,7 +83,7 @@ wagersRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    let { type, wager_id, wager_status, winner } = req.body;
+    let { type, wager_id, wager_status, winner_id, loser_id } = req.body;
     if(!type)
       return res
         .status(400)
@@ -102,7 +103,7 @@ wagersRouter
         .status(400)
         .json({ error: { message: `Wager status not provdied.`}})
     }
-    if(type === 'winner' && !winner) {
+    if(type === 'winner' && !winner_id) {
       return res
         .status(400)
         .json({ error: { message: `Winner not provided.`}})
@@ -114,14 +115,28 @@ wagersRouter
             .status(202)
             .json('Wager approved.')
         ))
+        .catch(next)
     }
     if(type === 'winner') {
-      WagersService.assignWinner(knexInstance, wager_id, winner, 'past')
-        .then(() => (
-          res
-            .status(202)
-            .json('Winner approved.')
-        ))
+      WagersService.assignWinner(knexInstance, wager_id, winner_id, 'past')
+        .then(() => {
+          UsersService.addTotalWin(knexInstance, winner_id)
+          .then(() => {
+            UsersService.addTotalLoss(knexInstance, loser_id)
+            .then(() => {
+              FriendshipsService.addWin(knexInstance, winner_id, loser_id)
+                .then(() => {
+                  FriendshipsService.addLoss(knexInstance, winner_id, loser_id)
+                    .then(() => {
+                      res
+                        .status(202)
+                        .json('Winner approved.')
+                    })
+                })
+            })
+          })
+        })
+        .catch(next)
     }
   })
     
